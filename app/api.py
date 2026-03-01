@@ -563,9 +563,10 @@ class SpiderProxySettings(BaseModel):
     https_proxy: str = ""
 
 SPIDER_PROXY_FILE = os.path.join(os.path.dirname(__file__), "spider_proxy.json")
+SPIDER_PROXY_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "spider_proxy_config.json")
 
 def get_spider_proxy_settings() -> SpiderProxySettings:
-    """获取爬虫代理设置"""
+    """获取爬虫代理设置，优先读取运行时配置，其次读取GitHub配置文件"""
     try:
         if os.path.exists(SPIDER_PROXY_FILE):
             with open(SPIDER_PROXY_FILE, 'r', encoding='utf-8') as f:
@@ -573,10 +574,19 @@ def get_spider_proxy_settings() -> SpiderProxySettings:
                 return SpiderProxySettings(**data)
     except:
         pass
+    
+    try:
+        if os.path.exists(SPIDER_PROXY_CONFIG_FILE):
+            with open(SPIDER_PROXY_CONFIG_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return SpiderProxySettings(**data)
+    except:
+        pass
+    
     return SpiderProxySettings()
 
 def save_spider_proxy_settings(settings: SpiderProxySettings):
-    """保存爬虫代理设置"""
+    """保存爬虫代理设置到运行时配置文件"""
     with open(SPIDER_PROXY_FILE, 'w', encoding='utf-8') as f:
         json.dump(settings.model_dump(), f, indent=2, ensure_ascii=False)
 

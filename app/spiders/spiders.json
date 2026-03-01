@@ -1,4 +1,12 @@
 {
+  "hd": {
+    "key": "hd",
+    "name": "花都",
+    "enabled": true,
+    "source": "upload",
+    "script_url": "",
+    "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\hd.py"
+  },
   "wawa": {
     "key": "wawa",
     "name": "哇哇",
@@ -7,16 +15,4 @@
     "script_url": "https://d.kstore.dev/download/3121/py/wawa.py",
     "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\wawa.py"
   }
-
-}
-{
-  "wawa": {
-    "key": "hd",
-    "name": "花都",
-    "enabled": true,
-    "source": "remote",
-    "script_url": "",
-    "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\hd.py"
-  }
-
 }

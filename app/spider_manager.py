@@ -47,6 +47,7 @@ class SpiderManager:
                     for key, config in remote_spiders.items():
                         if key not in info_data:
                             info_data[key] = {
+                                'key': key,
                                 'name': config.get('name', key),
                                 'enabled': True,
                                 'source': 'remote',
@@ -64,6 +65,7 @@ class SpiderManager:
                     for key, name in local_spiders.items():
                         if key not in info_data:
                             info_data[key] = {
+                                'key': key,
                                 'name': name,
                                 'enabled': True,
                                 'source': 'local',
@@ -103,6 +105,7 @@ class SpiderManager:
                     # 如果 info 文件中没有该爬虫的信息，创建默认信息
                     if key not in info_data:
                         info_data[key] = {
+                            'key': key,
                             'name': key,
                             'enabled': True,
                             'source': 'unknown',
@@ -169,6 +172,7 @@ class SpiderManager:
             info_data = {}
             for key, spider_info in self.spiders.items():
                 info_data[key] = {
+                    'key': key,
                     'name': spider_info['name'],
                     'enabled': spider_info['enabled'],
                     'source': spider_info.get('source', 'unknown'),
@@ -218,6 +222,7 @@ class SpiderManager:
         
         # 加载爬虫实例
         info = {
+            'key': key,
             'name': custom_name if custom_name else key,
             'enabled': True,
             'source': source_type,
@@ -326,6 +331,7 @@ class SpiderManager:
         # 重新加载
         try:
             self._load_spider_instance(key, file_path, {
+                'key': key,
                 'name': spider_info['name'],
                 'enabled': spider_info['enabled'],
                 'source': spider_info.get('source', 'unknown'),
@@ -335,6 +341,30 @@ class SpiderManager:
             print(f"重新加载爬虫成功: {key}")
         except Exception as e:
             print(f"重新加载爬虫失败 {key}: {str(e)}")
+    
+    def reload_all_spiders(self):
+        """
+        重新加载所有爬虫（从 spiders.json 和 spiders 目录）
+        用于 GitHub 同步后重新加载配置
+        """
+        print("开始重新加载所有爬虫...")
+        
+        # 销毁所有现有爬虫实例
+        for key, spider_info in self.spiders.items():
+            if hasattr(spider_info['instance'], 'destroy'):
+                try:
+                    spider_info['instance'].destroy()
+                except:
+                    pass
+        
+        # 清空内存中的爬虫
+        self.spiders.clear()
+        
+        # 重新加载
+        self._load_spiders()
+        
+        print(f"重新加载完成，共 {len(self.spiders)} 个爬虫")
+        return len(self.spiders)
     
     def enable_spider(self, key: str):
         if key in self.spiders:

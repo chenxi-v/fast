@@ -385,6 +385,49 @@ async def reload_spider(key: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/spiders/reload-all")
+async def reload_all_spiders():
+    """
+    重新加载所有爬虫（从 spiders.json 和 spiders 目录）
+    用于 GitHub 同步后手动触发重新加载
+    """
+    try:
+        count = spider_manager.reload_all_spiders()
+        return {"code": 0, "msg": "success", "data": {"count": count}}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/webhook/github")
+async def github_webhook(request: dict):
+    """
+    GitHub Webhook 端点
+    当 GitHub 仓库有推送时，自动重新加载所有爬虫
+    
+    在 GitHub 仓库设置中添加 Webhook：
+    - Payload URL: https://your-domain.com/webhook/github
+    - Content type: application/json
+    - Secret: 可选（暂未实现验证）
+    - Events: Just the push event
+    """
+    try:
+        event_type = request.get('ref', '')
+        print(f"收到 GitHub Webhook: {event_type}")
+        
+        count = spider_manager.reload_all_spiders()
+        
+        return {
+            "code": 0, 
+            "msg": "success", 
+            "data": {
+                "ref": event_type,
+                "spiders_count": count
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/spiders")
 async def list_spiders():
     """列出所有爬虫"""

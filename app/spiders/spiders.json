@@ -1,20 +1,10 @@
 {
   "wawa": {
+    "key": "wawa",
     "name": "哇哇",
     "enabled": true,
     "source": "remote",
-    "script_url": "",
+    "script_url": "https://d.kstore.dev/download/3121/py/wawa.py",
     "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\wawa.py"
   }
-
-}
-{
-  "wawa": {
-    "name": "花都",
-    "enabled": true,
-    "source": "remote",
-    "script_url": "",
-    "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\hd.py"
-  }
-
 }

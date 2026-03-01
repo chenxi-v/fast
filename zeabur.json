@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.zeabur.app/template.json",
+  "name": "longtv-backend",
+  "description": "TVBox 爬虫后端服务",
+  "services": [
+    {
+      "name": "backend",
+      "type": "PREBUILT",
+      "source": {
+        "type": "DOCKERFILE",
+        "url": "."
+      },
+      "ports": [
+        {
+          "id": "web",
+          "port": 8080,
+          "type": "HTTP"
+        }
+      ]
+    }
+  ]
+}

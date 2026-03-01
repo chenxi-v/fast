@@ -108,7 +108,7 @@ class SpiderManager:
                             'key': key,
                             'name': key,
                             'enabled': True,
-                            'source': 'unknown',
+                            'source': 'upload',
                             'script_url': '',
                             'file_path': file_path
                         }
@@ -120,8 +120,7 @@ class SpiderManager:
                     except Exception as e:
                         print(f"加载爬虫 {filename} 失败: {str(e)}")
         
-        # 保存更新后的 info 文件（确保所有爬虫都有记录）
-        self._save_info(info_data)
+        self._save_info()
     
     def _load_spider_instance(self, key: str, file_path: str, info: Dict[str, Any]):
         """加载爬虫实例"""

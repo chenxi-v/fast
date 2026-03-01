@@ -24,7 +24,7 @@ class Spider(Spider):
         pass
 
     def getName(self):
-        pass
+        return "娃娃"
 
     def isVideoFormat(self, url):
         """

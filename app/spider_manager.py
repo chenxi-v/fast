@@ -19,6 +19,7 @@ class SpiderManager:
         self.spiders: Dict[str, Dict[str, Any]] = {}
         self._spiders_dir = os.path.join(os.path.dirname(__file__), "spiders")
         self._info_file = os.path.join(self._spiders_dir, "spiders.json")
+        self._proxy_config: Dict[str, str] = {}
         
         # 确保 spiders 目录存在
         if not os.path.exists(self._spiders_dir):
@@ -145,7 +146,9 @@ class SpiderManager:
             raise ValueError("脚本中未找到Spider类")
         
         spider_instance = spider_class()
-        spider_instance.init()
+        
+        proxy_json = json.dumps(self._proxy_config) if self._proxy_config else ""
+        spider_instance.init(proxy_json)
         
         # 获取爬虫名称（优先使用 info 中的名称，其次从爬虫实例获取）
         spider_name = info.get('name', key)
@@ -180,6 +183,14 @@ class SpiderManager:
                 }
         
         try:
+            existing_data = {}
+            if os.path.exists(self._info_file):
+                with open(self._info_file, 'r', encoding='utf-8') as f:
+                    existing_data = json.load(f)
+            
+            if existing_data == info_data:
+                return
+            
             with open(self._info_file, 'w', encoding='utf-8') as f:
                 json.dump(info_data, f, indent=2, ensure_ascii=False)
         except Exception as e:
@@ -414,6 +425,38 @@ class SpiderManager:
             self._save_info()
         
         return old_key
+    
+    def set_proxy_config(self, proxy_config: Dict[str, str]):
+        """
+        设置代理配置并重新加载所有爬虫
+        
+        参数:
+            proxy_config: 代理配置字典，例如 {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
+        """
+        self._proxy_config = proxy_config
+        print(f"设置爬虫代理配置: {proxy_config}")
+        
+        for key, spider_info in self.spiders.items():
+            try:
+                if hasattr(spider_info['instance'], 'destroy'):
+                    try:
+                        spider_info['instance'].destroy()
+                    except:
+                        pass
+                
+                file_path = spider_info.get('file_path')
+                if file_path and os.path.exists(file_path):
+                    self._load_spider_instance(key, file_path, {
+                        'key': key,
+                        'name': spider_info['name'],
+                        'enabled': spider_info['enabled'],
+                        'source': spider_info.get('source', 'unknown'),
+                        'script_url': spider_info.get('script_url', ''),
+                        'file_path': file_path
+                    })
+                    print(f"已为爬虫 {key} 应用代理配置")
+            except Exception as e:
+                print(f"为爬虫 {key} 应用代理配置失败: {str(e)}")
 
 
 spider_manager = SpiderManager()

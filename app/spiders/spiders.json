@@ -7,12 +7,28 @@
     "script_url": "",
     "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\hd.py"
   },
+  "hs": {
+    "key": "hs",
+    "name": "小红薯",
+    "enabled": true,
+    "source": "upload",
+    "script_url": "",
+    "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\hs.py"
+  },
+  "tt": {
+    "key": "tt",
+    "name": "天堂",
+    "enabled": true,
+    "source": "upload",
+    "script_url": "",
+    "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\tt.py"
+  },
   "wawa": {
     "key": "wawa",
     "name": "哇哇",
     "enabled": true,
-    "source": "remote",
-    "script_url": "https://d.kstore.dev/download/3121/py/wawa.py",
+    "source": "upload",
+    "script_url": "",
     "file_path": "C:\\Users\\chenxi\\Desktop\\LongTV-main\\Fastapi\\app\\spiders\\wawa.py"
   }
 }

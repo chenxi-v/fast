@@ -3,11 +3,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.api import router
 
+class UnicodeJSONResponse(JSONResponse):
+    def render(self, content) -> bytes:
+        import json
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=None,
+            separators=(",", ":"),
+        ).encode("utf-8")
+
 app = FastAPI(
     title="TVBox 爬虫后端服务",
     description="实现 TVBox type: 3 爬虫源功能的后端服务",
     version="1.0.0",
-    default_response_class=JSONResponse
+    default_response_class=UnicodeJSONResponse
 )
 
 app.add_middleware(

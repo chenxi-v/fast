@@ -20,7 +20,6 @@ class Spider(ABC):
         self.header = {}
         self.extend = {}
         
-    @abstractmethod
     def init(self, extend=""):
         """
         爬虫初始化
@@ -149,11 +148,9 @@ class Spider(ABC):
         try:
             response = requests.get(url, headers=headers, timeout=timeout, params=params)
             response.encoding = response.apparent_encoding
-            # 返回完整的response对象以便调用方可以访问.json()等方法
             return response
         except Exception as e:
             print(f"请求失败: {url}, 错误: {str(e)}")
-            # 返回一个模拟的response对象
             class MockResponse:
                 def __init__(self):
                     self.status_code = 500
@@ -181,12 +178,9 @@ class Spider(ABC):
         try:
             response = requests.post(url, data=data, headers=headers, timeout=timeout, **kwargs)
             response.encoding = response.apparent_encoding
-            # 检查是否需要返回完整response对象还是文本内容
-            # 如果有其他代码需要访问response对象属性，则需返回response
             return response
         except Exception as e:
             print(f"POST请求失败: {url}, 错误: {str(e)}")
-            # 返回一个模拟的response对象
             class MockResponse:
                 def __init__(self):
                     self.status_code = 500

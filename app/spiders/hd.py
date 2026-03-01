@@ -35,8 +35,8 @@ class Spider(Spider):
         self.session.headers.update(self.headers)
         pass
 
-    def getName(self):
-        pass
+    def getName(self):
+        return "黑洞"
 
     def isVideoFormat(self, url):
         pass
